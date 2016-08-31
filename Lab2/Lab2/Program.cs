@@ -11,6 +11,7 @@ namespace Lab2
         static void Main(string[] args)
         {
             Console.WriteLine("Hello world");
+            Console.WriteLine("c# superior, python inferior");
             Console.ReadLine();
         }
     }
