@@ -20,7 +20,7 @@ namespace testapp
         }
         static void Main(string[] args)
         {
-            string exp = "2*(c-1)";
+            string exp = "2*(0-1)";
             
             Console.WriteLine(FormulaEvaluator.FormulaEvaluator.Calculate(exp, LookUp));
             Console.Read();
