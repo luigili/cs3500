@@ -37,9 +37,9 @@ namespace FormulaEvaluator
         /// <summary>
         /// evaluation function, call it and it will return an double
         /// </summary>
-        /// <param name="example"></param>
-        /// <param name="VirableEvaluator"></param>
-        /// <returns></returns>
+        /// <param name="example">the whol expression it takes</param>
+        /// <param name="VirableEvaluator">the look up function for viarable</param>
+        /// <returns>returns result as a double</returns>
 
         public static double Calculate(string example, Lookup VirableEvaluator)
         {
@@ -60,7 +60,7 @@ namespace FormulaEvaluator
                 };
                 if (UnknownToken.IsValid == false && Converted.HasValue == false)
                 {
-                    //if the first character ins not a operator and the whole token has no value(null), it's an operator
+                    //if the first character ins not a operator and the whole token has no value(null), it's an viarable
                     Converted = VirableEvaluator(token);
                 }
                 if (Converted.HasValue)
