@@ -22,60 +22,60 @@ namespace PS2GradingTests
         // ************************** TESTS ON EMPTY DGs ************************* //
 
         /// <summary>
-        ///Empty graph should contain nothing
+        ///Empty graph should contain nothing,size should be 0
         ///</summary>
         [TestMethod()]
-        public void EmptyTest1()
+        public void EmptyTestSizecount()
         {
             DependencyGraph t = new DependencyGraph();
             Assert.AreEqual(0, t.Size);
         }
 
         /// <summary>
-        ///Empty graph should contain nothing
+        ///Empty graph should contain nothing, so a should not have dependees
         ///</summary>
         [TestMethod()]
-        public void EmptyTest2()
+        public void EmptyTestDependenee()
         {
             DependencyGraph t = new DependencyGraph();
             Assert.IsFalse(t.HasDependees("a"));
         }
 
         /// <summary>
-        ///Empty graph should contain nothing
+        ///Empty graph should contain nothing, so a should have no dependents
         ///</summary>
         [TestMethod()]
-        public void EmptyTest3()
+        public void EmptyTestDependents()
         {
             DependencyGraph t = new DependencyGraph();
             Assert.IsFalse(t.HasDependents("a"));
         }
 
         /// <summary>
-        ///Empty graph should contain nothing
+        ///Empty graph should contain nothing, so a's dependess canoot iterate to the next one
         ///</summary>
         [TestMethod()]
-        public void EmptyTest4()
+        public void EmptyTestDependeesIterate()
         {
             DependencyGraph t = new DependencyGraph();
             Assert.IsFalse(t.GetDependees("a").GetEnumerator().MoveNext());
         }
 
         /// <summary>
-        ///Empty graph should contain nothing
+        ///Empty graph should contain nothing,so a's dependents canoot iterate to the next one
         ///</summary>
         [TestMethod()]
-        public void EmptyTest5()
+        public void EmptyTestDependentsIterate()
         {
             DependencyGraph t = new DependencyGraph();
             Assert.IsFalse(t.GetDependents("a").GetEnumerator().MoveNext());
         }
 
         /// <summary>
-        ///Empty graph should contain nothing
+        ///Empty graph should contain nothing, s should have no dependees
         ///</summary>
         [TestMethod()]
-        public void EmptyTest6()
+        public void EmptyTestDependeeCount()
         {
             DependencyGraph t = new DependencyGraph();
             Assert.AreEqual(0, t["a"]);
@@ -85,7 +85,7 @@ namespace PS2GradingTests
         ///Removing from an empty DG shouldn't fail
         ///</summary>
         [TestMethod()]
-        public void EmptyTest7()
+        public void EmptyTestRemove()
         {
             DependencyGraph t = new DependencyGraph();
             t.RemoveDependency("a", "b");
@@ -96,7 +96,7 @@ namespace PS2GradingTests
         ///Adding an empty DG shouldn't fail
         ///</summary>
         [TestMethod()]
-        public void EmptyTest8()
+        public void EmptyTestAdd()
         {
             DependencyGraph t = new DependencyGraph();
             t.AddDependency("a", "b");
@@ -106,7 +106,7 @@ namespace PS2GradingTests
         ///Replace on an empty DG shouldn't fail
         ///</summary>
         [TestMethod()]
-        public void EmptyTest9()
+        public void EmptyTestReplaceDependents()
         {
             DependencyGraph t = new DependencyGraph();
             t.ReplaceDependents("a", new HashSet<string>());
@@ -117,7 +117,7 @@ namespace PS2GradingTests
         ///Replace on an empty DG shouldn't fail
         ///</summary>
         [TestMethod()]
-        public void EmptyTest10()
+        public void EmptyTestReplaceDependees()
         {
             DependencyGraph t = new DependencyGraph();
             t.ReplaceDependees("a", new HashSet<string>());
@@ -128,22 +128,23 @@ namespace PS2GradingTests
         /**************************** SIMPLE NON-EMPTY TESTS ****************************/
 
         /// <summary>
-        ///Non-empty graph contains something
+        ///Non-empty graph contains something,size should grow
         ///</summary>
         [TestMethod()]
-        public void NonEmptyTest1()
+        public void NonEmptyTestSize()
         {
             DependencyGraph t = new DependencyGraph();
             t.AddDependency("a", "b");
             t.AddDependency("a", "c");
-            Assert.AreEqual(2, t.Size);
+            t.AddDependency("b", "c");
+            Assert.AreEqual(3, t.Size);
         }
 
         /// <summary>
-        ///Slight variant
+        ///Slight variant, it should recognized duplicate pair without crashing
         ///</summary>
         [TestMethod()]
-        public void NonEmptyTest2()
+        public void NonEmptyTestDuplicate()
         {
             DependencyGraph t = new DependencyGraph();
             t.AddDependency("a", "b");
@@ -152,10 +153,10 @@ namespace PS2GradingTests
         }
 
         /// <summary>
-        ///Nonempty graph should contain something
+        ///Nonempty graph should contain something, it should build dependecy
         ///</summary>
         [TestMethod()]
-        public void NonEmptyTest3()
+        public void NonEmptyTestDependency()
         {
             DependencyGraph t = new DependencyGraph();
             t.AddDependency("a", "b");
@@ -168,10 +169,10 @@ namespace PS2GradingTests
         }
 
         /// <summary>
-        ///Nonempty graph should contain something
+        ///Nonempty graph should contain something,should iterate
         ///</summary>
         [TestMethod()]
-        public void NonEmptyTest4()
+        public void NonEmptyTestGet()
         {
             DependencyGraph t = new DependencyGraph();
             t.AddDependency("a", "b");
@@ -200,10 +201,10 @@ namespace PS2GradingTests
         }
 
         /// <summary>
-        ///Nonempty graph should contain something
+        ///Nonempty graph should contain something,it should count dependees
         ///</summary>
         [TestMethod()]
-        public void NonEmptyTest5()
+        public void NonEmptyTestCountDependee()
         {
             DependencyGraph t = new DependencyGraph();
             t.AddDependency("a", "b");
@@ -220,7 +221,7 @@ namespace PS2GradingTests
         ///Removing from a DG 
         ///</summary>
         [TestMethod()]
-        public void NonEmptyTest6()
+        public void NonEmptyTestRemove()
         {
             DependencyGraph t = new DependencyGraph();
             t.AddDependency("a", "b");
@@ -234,7 +235,7 @@ namespace PS2GradingTests
         ///Replace on a DG
         ///</summary>
         [TestMethod()]
-        public void NonEmptyTest7()
+        public void NonEmptyTestReplaceDpendents()
         {
             DependencyGraph t = new DependencyGraph();
             t.AddDependency("a", "b");
@@ -242,14 +243,17 @@ namespace PS2GradingTests
             t.AddDependency("d", "c");
             t.ReplaceDependents("a", new HashSet<string>() { "x", "y", "z" });
             HashSet<String> aPends = new HashSet<string>(t.GetDependents("a"));
-            Assert.IsTrue(aPends.SetEquals(new HashSet<string>() { "x", "y", "z" }));
+            Assert.IsTrue(aPends.SetEquals(new HashSet<string>() { "z", "y", "x" }));
+            Assert.IsTrue(aPends.Contains("x"));
+            Assert.IsTrue(aPends.Contains("y"));
+            Assert.IsTrue(aPends.Contains("z"));
         }
 
         /// <summary>
         ///Replace on a DG
         ///</summary>
         [TestMethod()]
-        public void NonEmptyTest8()
+        public void NonEmptyTestReplaceDependee()
         {
             DependencyGraph t = new DependencyGraph();
             t.AddDependency("a", "b");
@@ -257,6 +261,7 @@ namespace PS2GradingTests
             t.AddDependency("d", "c");
             t.ReplaceDependees("c", new HashSet<string>() { "x", "y", "z" });
             HashSet<String> cDees = new HashSet<string>(t.GetDependees("c"));
+            
             Assert.IsTrue(cDees.SetEquals(new HashSet<string>() { "x", "y", "z" }));
         }
 
