@@ -1,6 +1,8 @@
 ﻿// Skeleton implementation written by Joe Zachary for CS 3500, September 2013.
 // Version 1.1 (Fixed error in comment for RemoveDependency.)
 
+//method implemntation by Linxi Li 9/13/2016
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +44,7 @@ namespace SpreadsheetUtilities
         /// intialize new lists of dependents and dependees
         /// </summary>
         private Dictionary<string, HashSet<string>> Keys = new Dictionary<string, HashSet<string>>();
-        private int size;
+       
         /// <summary>
         /// Creates an empty DependencyGraph.
         /// </summary>
@@ -51,7 +53,6 @@ namespace SpreadsheetUtilities
         public DependencyGraph()
         {
             Keys = new Dictionary<string, HashSet<string>>();
-            size = 0;
         }
 
 
@@ -62,6 +63,10 @@ namespace SpreadsheetUtilities
         {
             get { return GetSize(); }
         }
+        /// <summary>
+        /// counts the size by counting depents of each key
+        /// </summary>
+        /// <returns>size, actually the total count of values</returns>
         private int GetSize()
         {
             int size = 0;

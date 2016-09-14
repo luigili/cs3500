@@ -216,7 +216,28 @@ namespace PS2GradingTests
             Assert.AreEqual(0, t["d"]);
             Assert.AreEqual(0, t["e"]);
         }
-
+        /// <summary>
+        /// test iteration of a nonempty graph for dependents
+        /// </summary>
+        [TestMethod()]
+        public void NonEmptyTestDependentsIterate()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a","c");
+            t.AddDependency("a","b");
+            Assert.IsTrue(t.GetDependents("a").GetEnumerator().MoveNext());
+        }
+        /// <summary>
+        /// test iteration of a nonempty graph for dependees
+        /// </summary>
+        [TestMethod()]
+        public void NonEmptyTestDependeesIterate()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "c");
+            t.AddDependency("b", "c");
+            Assert.IsTrue(t.GetDependees("c").GetEnumerator().MoveNext());
+        }
         /// <summary>
         ///Removing from a DG 
         ///</summary>
@@ -287,14 +308,35 @@ namespace PS2GradingTests
             t.AddDependency("a", "b");
             t.AddDependency("a", "c");
             t.AddDependency("d", "c");
-            Assert.AreEqual(3,t.Size);
             t.ReplaceDependees("c", new HashSet<string>() { "x", "y", "z" });
-            HashSet<String> cDees = new HashSet<string>(t.GetDependees("c"));
-
+            
             Assert.AreEqual(4,t.Size);
         }
+        /// <summary>
+        /// replace dependees with existing keys
+        /// </summary>
+        [TestMethod()]
+        public void NonEmptyTestReplaceDependeeExist()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.ReplaceDependees("c", new HashSet<string>() { "b" });
 
+            HashSet<String> cDees = new HashSet<string>(t.GetDependees("c"));
 
+            Assert.IsTrue(cDees.SetEquals(new HashSet<string>() { "b" }));
+        }
+        public void NonEmptyTestReplaceDependeeExistSize()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.ReplaceDependees("c", new HashSet<string>() { "b" });
+            Assert.AreEqual(2,t.Size);
+        }
         // ************************** STRESS TESTS ******************************** //
         /// <summary>
         ///Using lots of data
