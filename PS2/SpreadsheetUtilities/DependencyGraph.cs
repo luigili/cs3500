@@ -41,7 +41,7 @@ namespace SpreadsheetUtilities
         /// <summary>
         /// intialize new lists of dependents and dependees
         /// </summary>
-        private Dictionary<string, HashSet<string>> Roots = new Dictionary<string, HashSet<string>>();
+        private Dictionary<string, HashSet<string>> Keys = new Dictionary<string, HashSet<string>>();
         private int size;
         /// <summary>
         /// Creates an empty DependencyGraph.
@@ -50,11 +50,8 @@ namespace SpreadsheetUtilities
 
         public DependencyGraph()
         {
-            Roots = new Dictionary<string, HashSet<string>>();
+            Keys = new Dictionary<string, HashSet<string>>();
             size = 0;
-        
-
-        
         }
 
 
@@ -63,7 +60,16 @@ namespace SpreadsheetUtilities
         /// </summary>
         public int Size
         {
-            get { return size; }
+            get { return GetSize(); }
+        }
+        private int GetSize()
+        {
+            int size = 0;
+            foreach (KeyValuePair<String, HashSet<string>> pair in Keys)
+            {
+                size += pair.Value.Count();
+            }
+            return size;
         }
 
 
@@ -81,7 +87,7 @@ namespace SpreadsheetUtilities
             get
             {
                 int count = 0;
-                foreach(KeyValuePair<String, HashSet<String>> Pair in Roots)
+                foreach(KeyValuePair<String, HashSet<String>> Pair in Keys)
                 {
                     if (Pair.Value.Contains(s))
                     {
@@ -99,7 +105,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public bool HasDependents(string s)
         {
-            foreach (KeyValuePair<String,HashSet<String>> Pair in Roots)
+            foreach (KeyValuePair<String,HashSet<String>> Pair in Keys)
             {
                 if (Pair.Key == s && Pair.Value != null)
                 {
@@ -115,7 +121,7 @@ namespace SpreadsheetUtilities
         /// </summary>
         public bool HasDependees(string s)
         {
-            foreach (KeyValuePair<String, HashSet<String>> Pair in Roots)
+            foreach (KeyValuePair<String, HashSet<String>> Pair in Keys)
             {
                 if (Pair.Value.Contains(s))
                 {
@@ -133,7 +139,7 @@ namespace SpreadsheetUtilities
         {
             try
             {
-                return new HashSet<string>(Roots[s]);
+                return new HashSet<string>(Keys[s]);
             }
             catch (KeyNotFoundException)
             {
@@ -147,7 +153,7 @@ namespace SpreadsheetUtilities
         public IEnumerable<string> GetDependees(string s)
         {
             HashSet<string> result=new HashSet<string>();
-            foreach(KeyValuePair<string,HashSet<string>> pair in Roots)
+            foreach(KeyValuePair<string,HashSet<string>> pair in Keys)
             {
                 if (pair.Value.Contains(s))
                 {
@@ -173,21 +179,21 @@ namespace SpreadsheetUtilities
         /// <param name="t"> t cannot be evaluated until s is</param>        /// 
         public void AddDependency(string s, string t)
         {
-            if (Roots.ContainsKey(s) && Roots[s].Contains(t))
+            if (Keys.ContainsKey(s) && Keys[s].Contains(t))
             {
                 return;
             }
-            else if (Roots.ContainsKey(s) && !Roots[s].Contains(t))
+            else if (Keys.ContainsKey(s) && !Keys[s].Contains(t))
             {
-                Roots[s].Add(t);
-                size++;
+                Keys[s].Add(t);
+                
             }
             else
             {
                 HashSet<string> Value = new HashSet<string>();
                 Value.Add(t);
-                Roots.Add(s, Value);
-                size++;
+                Keys.Add(s, Value);
+                
             }
         }
 
@@ -199,12 +205,12 @@ namespace SpreadsheetUtilities
         /// <param name="t"></param>
         public void RemoveDependency(string s, string t)
         {
-            foreach (KeyValuePair<string,HashSet<string>> pair in Roots)
+            foreach (KeyValuePair<string,HashSet<string>> pair in Keys)
             {
                 if (pair.Key==s&&pair.Value.Contains(t))
                 {
                     pair.Value.Remove(t);
-                    size -= 1;
+                    
                 }
                 else
                 {
@@ -220,13 +226,14 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependents(string s, IEnumerable<string> newDependents)
         {
-            if (!Roots.ContainsKey(s))
+            if (!Keys.ContainsKey(s))
             {
                 return;
             }
-
-            Roots[s].Clear();
-            Roots[s].UnionWith(newDependents);
+           
+            Keys[s].Clear();
+            Keys[s].UnionWith(newDependents);
+          
             
          
         }
@@ -238,26 +245,26 @@ namespace SpreadsheetUtilities
         /// </summary>
         public void ReplaceDependees(string s, IEnumerable<string> newDependees)
         {
-            foreach(KeyValuePair<string,HashSet<string>> pair in Roots)
+            foreach(KeyValuePair<string,HashSet<string>> pair in Keys)
             {
                 if (pair.Value.Contains(s))
                 {
                     pair.Value.Remove(s);
-                    size -= 1;
+                   
                 }
                 
             }
             foreach (string newDee in newDependees)
             {
-                if (Roots.ContainsKey(newDee))
+                if (Keys.ContainsKey(newDee)&&!Keys[newDee].Contains(s))
                 {
-                    Roots[newDee].Add(s);
-                    size += 1;
+                    Keys[newDee].Add(s);
+                    
                 }
-                else
+                else if(!Keys.ContainsKey(newDee))
                 {
                     AddDependency(newDee, s);
-                    size += 1;
+                    
                 }
             }
 

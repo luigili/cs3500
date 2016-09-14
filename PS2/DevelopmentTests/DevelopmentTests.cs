@@ -244,9 +244,22 @@ namespace PS2GradingTests
             t.ReplaceDependents("a", new HashSet<string>() { "x", "y", "z" });
             HashSet<String> aPends = new HashSet<string>(t.GetDependents("a"));
             Assert.IsTrue(aPends.SetEquals(new HashSet<string>() { "z", "y", "x" }));
-            Assert.IsTrue(aPends.Contains("x"));
-            Assert.IsTrue(aPends.Contains("y"));
-            Assert.IsTrue(aPends.Contains("z"));
+            
+        }
+        /// <summary>
+        /// test the size count after replace
+        /// </summary>
+        [TestMethod()]
+        public void NonEmptyTestReplaceDpendentsSize()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            t.ReplaceDependents("a", new HashSet<string>() { "x", "y", "z" });
+            HashSet<String> aPends = new HashSet<string>(t.GetDependents("a"));
+            Assert.AreEqual(4,t.Size);
+
         }
 
         /// <summary>
@@ -264,6 +277,23 @@ namespace PS2GradingTests
             
             Assert.IsTrue(cDees.SetEquals(new HashSet<string>() { "x", "y", "z" }));
         }
+        /// <summary>
+        /// test size after replace dependee
+        /// </summary>
+        [TestMethod()]
+        public void NonEmptyTestReplaceDependeeSize()
+        {
+            DependencyGraph t = new DependencyGraph();
+            t.AddDependency("a", "b");
+            t.AddDependency("a", "c");
+            t.AddDependency("d", "c");
+            Assert.AreEqual(3,t.Size);
+            t.ReplaceDependees("c", new HashSet<string>() { "x", "y", "z" });
+            HashSet<String> cDees = new HashSet<string>(t.GetDependees("c"));
+
+            Assert.AreEqual(4,t.Size);
+        }
+
 
         // ************************** STRESS TESTS ******************************** //
         /// <summary>
@@ -329,7 +359,7 @@ namespace PS2GradingTests
         ///Using lots of data with replacement
         ///</summary>
         [TestMethod()]
-        public void StressTest8()
+        public void StressTest2()
         {
             // Dependency graph
             DependencyGraph t = new DependencyGraph();
@@ -409,7 +439,7 @@ namespace PS2GradingTests
         ///Using lots of data with replacement
         ///</summary>
         [TestMethod()]
-        public void StressTest15()
+        public void StressTest3()
         {
             // Dependency graph
             DependencyGraph t = new DependencyGraph();
@@ -485,3 +515,4 @@ namespace PS2GradingTests
         }
     }
 }
+    
